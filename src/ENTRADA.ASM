@@ -1,13 +1,17 @@
-; src/entrada.asm — Programa 2: leer carácter del teclado y mostrar eco ; Ensamble: nasm -f bin entrada.asm -o ../bin/entrada.com 
+; src/entrada.asm — Programa 2: leer carácter del teclado y mostrar eco
+; Ensamble: nasm -f bin entrada.asm -o ../bin/entrada.com
 
-org 0x100 
-section .data 
-    prompt db "Ingrese una letra (se mostrara su codigo ASCII): $" 
-    msg_ok db 0Dh, 0Ah, "Caracter recibido: $" 
-    msg_cod db 0Dh, 0Ah, "Codigo ASCII (hex): $" 
-    nl db 0Dh, 0Ah, "$" 
+org 0x100
 
-section .text ; Mostrar prompt mov ah, 09h mov dx, prompt int 21h
+section .data
+    prompt  db "Ingrese una letra (se mostrara su codigo ASCII): $"
+    msg_ok  db 0Dh, 0Ah, "Caracter recibido: $"
+    msg_cod db 0Dh, 0Ah, "Codigo ASCII (hex): $"
+    nl      db 0Dh, 0Ah, "$"
+
+section .text
+
+    ; Mostrar prompt
     mov ah, 09h
     mov dx, prompt
     int 21h
@@ -25,7 +29,7 @@ section .text ; Mostrar prompt mov ah, 09h mov dx, prompt int 21h
     mov dl, bl
     int 21h
 
-    ; ; Mostrar el código ASCII en hexadecimal
+    ; Mostrar el código ASCII en hexadecimal
     mov ah, 09h
     mov dx, msg_cod
     int 21h
@@ -38,21 +42,22 @@ section .text ; Mostrar prompt mov ah, 09h mov dx, prompt int 21h
     and al, 0Fh
     call print_hex_nibble
 
-    ; ; Nueva línea y terminar
-    ; mov ah, 09h
-    ; mov dx, nl
-    ; int 21h
-    ; mov ax, 4C00h
-    ; int 21h
+    ; Nueva línea y terminar
+    mov ah, 09h
+    mov dx, nl
+    int 21h
+    mov ax, 4C00h
+    int 21h
 
-    ; print_hex_nibble:
-    ; cmp al, 9
-    ; jle .digito
-    ; add al, 7
-    ; .digito:
-    ; add al, 30h
-    ; mov ah, 02h
-    ; mov dl, al
-    ; int 21h
+print_hex_nibble:
+    cmp al, 9
+    jle .digito
+    add al, 7
+
+.digito:
+    add al, 30h
+    mov ah, 02h
+    mov dl, al
+    int 21h
     ret
 
